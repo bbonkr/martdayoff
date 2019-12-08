@@ -4,18 +4,50 @@
                      xmlns:bbon="clr-namespace:kr.bbon.Xamarin.Forms;assembly=kr.bbon.Xamarin.Forms"
                      xmlns:viewmodel="clr-namespace:MartDayOff.ViewModels"
                      xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+                     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     mc:Ignorable="d"
                      x:Class="MartDayOff.Views.HomePage"
                      x:TypeArguments="viewmodel:HomeViewModel"
                      ios:Page.UseSafeArea="True"
-                     BackgroundColor="#aaff0000"
-                     Shell.NavBarIsVisible="True"
-                     Shell.BackgroundColor="#aaff0000">
+                     BackgroundColor="{Binding BackgoundColor}"
+                     Title="{Binding Title}"
+                     Shell.NavBarIsVisible="False"
+                     Shell.BackgroundColor="{Binding BackgroundColor}">
+    <d:ContentPage.BindingContext>
+        <viewmodel:HomeViewModel />
+    </d:ContentPage.BindingContext>
     <ContentPage.Content>
-        <AbsoluteLayout>
-            <RefreshView>
-                <Label Text="Hello" FontSize="Title"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        Padding="0">
+            <RefreshView AbsoluteLayout.LayoutBounds="1.0, 1.0, 1.0, 1.0"
+                         AbsoluteLayout.LayoutFlags="All"
+                         HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand"
+                         Padding="0, 0, 0, 0">
+                <FlexLayout Direction="Column" Padding="10, 20, 10, 20">
+                    <Label Text="{Binding TodayText}"
+                           FontSize="Title"
+                           TextColor="{Binding TextColor}"
+                           FontAttributes="None"
+                           HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center"/>
+                    <Label Text="{Binding StatusText}"
+                           FontSize="Header"
+                           FlexLayout.Grow="1"
+                           TextColor="{Binding TextColor}"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"/>
+                    <Label Text="{Binding Description}"
+                          
+                           FontSize="Body"
+                           TextColor="{Binding TextColor}"
+                           HorizontalTextAlignment="Start"                           
+                           VerticalTextAlignment="Center"/>
+                </FlexLayout>
+                
             </RefreshView>
         </AbsoluteLayout>
     </ContentPage.Content>
