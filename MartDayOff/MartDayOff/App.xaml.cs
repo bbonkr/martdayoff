@@ -6,17 +6,21 @@ using MartDayOff.Views;
 using MartDayOff.Models;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Autofac;
+using kr.bbon.Xamarin.Forms;
 
 namespace MartDayOff
 {
     public partial class App : Application
     {
-
-        public App()
+        public App(ContainerStartup containerStartup)
         {
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
+
+            containerStartup.Build();
+
             MainPage = new AppShell();
         }
 

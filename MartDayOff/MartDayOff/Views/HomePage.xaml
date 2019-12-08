@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bbon:AppContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     xmlns:bbon="clr-namespace:kr.bbon.Xamarin.Forms;assembly=kr.bbon.Xamarin.Forms"
+                     xmlns:viewmodel="clr-namespace:MartDayOff.ViewModels"
+                     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+                     x:Class="MartDayOff.Views.HomePage"
+                     x:TypeArguments="viewmodel:HomeViewModel"
+                     ios:Page.UseSafeArea="True"
+                     BackgroundColor="#aaff0000"
+                     Shell.NavBarIsVisible="True"
+                     Shell.BackgroundColor="#aaff0000">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <RefreshView>
+                <Label Text="Hello" FontSize="Title"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </RefreshView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</bbon:AppContentPage>

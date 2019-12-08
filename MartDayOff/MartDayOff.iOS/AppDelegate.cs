@@ -24,7 +24,10 @@ namespace MartDayOff.iOS
         {
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+
+            var containerStartup = new ContainerStartup_iOS();
+
+            LoadApplication(new App(containerStartup));
 
             return base.FinishedLaunching(app, options);
         }
