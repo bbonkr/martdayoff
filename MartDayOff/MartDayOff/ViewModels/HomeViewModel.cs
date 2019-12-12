@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Windows.Input;
 using kr.bbon.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -12,8 +13,10 @@ namespace MartDayOff.ViewModels
             : base()
         {
             Title = "마트쉬는 날";
-            initialize();
+            Initialize();
         }        
+        
+        public ICommand RefreshCommand { get; private set; }
 
         public string BackgoundColor
         {
@@ -44,23 +47,41 @@ namespace MartDayOff.ViewModels
             set => SetProperty(ref description, value);
         }
 
-        private void initialize()
+        protected override void InitializeCommands()
         {
-            var dayoff = CheckDayOff();
+            base.InitializeCommands();
 
-            CultureInfo cultures = CultureInfo.CreateSpecificCulture("ko-KR");
-            TodayText =string.Format(cultures, "오늘은 {0:yyyy년 MM월 dd일 ddd요일}입니다.", DateTime.Now);
+            RefreshCommand = new Command(() => { Initialize(); }) ;
+        }
 
-            BackgoundColor = dayoff ? "#aadd0000" : "#aa00dd00";
-            TextColor = dayoff ? "#eedddddd" : "#eedddddd";
-            StatusText = dayoff ? "휴점" : "개점";
+        private void Initialize()
+        {
+            if (IsBusy) { return; }
 
-            Description = "대형 마트는 월 2회 의무 휴업이 강제되고 있습니다. 보통 두번째 일요일, 네번째 일요일을 휴무일로 정해져 있습니다.";
+            IsBusy = true;
+            try
+            {
+                var dayoff = CheckDayOff();
+
+                CultureInfo cultures = CultureInfo.CreateSpecificCulture("ko-KR");
+                TodayText = string.Format(cultures, "{0:yyyy년 MM월 dd일 ddd요일}", DateTime.Now);
+
+                BackgoundColor = dayoff ? "#aadd0000" : "#aa00aa33";
+                TextColor = dayoff ? "#eedddddd" : "#eedddddd";
+                StatusText = dayoff ? "휴점" : "개점";
+
+                Description = "대형 마트는 월 2회 의무 휴업이 강제되고 있습니다. 보통 두번째 일요일, 네번째 일요일을 휴무일로 정해져 있습니다.";
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+            
         }
 
         private bool CheckDayOff()
         {
-            var today = DateTime.Now.AddDays(1);
+            var today = DateTime.Now;
             var list = Get2ndAnd4thSunday(today);
             return list.Contains($"{today:yyyy-MM-dd}");
         }
@@ -79,11 +100,14 @@ namespace MartDayOff.ViewModels
                 if (currentDate.DayOfWeek == DayOfWeek.Sunday)
                 {
                     check += 1;
+                    
+                    if (check == 2 || check == 4)
+                    {
+                        results.Add($"{ currentDate:yyyy-MM-dd}");
+                    }
                 }
 
-                if (check == 2 || check == 4) {
-                    results.Add($"{ currentDate:yyyy-MM-dd}");
-                }
+                
             }
             return results;
         }

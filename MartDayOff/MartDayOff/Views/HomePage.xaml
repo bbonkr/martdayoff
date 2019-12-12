@@ -25,6 +25,9 @@
                          AbsoluteLayout.LayoutFlags="All"
                          HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand"
+                         
+                         Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsBusy, Mode=OneWay}"                         
                          Padding="0, 0, 0, 0">
                 <FlexLayout Direction="Column" Padding="10, 20, 10, 20">
                     <Label Text="{Binding TodayText}"
