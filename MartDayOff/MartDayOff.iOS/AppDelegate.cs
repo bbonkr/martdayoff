@@ -29,7 +29,43 @@ namespace MartDayOff.iOS
 
             LoadApplication(new App(containerStartup));
 
+            if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+            {
+                var notificationSettings = UIUserNotificationSettings.GetSettingsForTypes(
+                    UIUserNotificationType.Alert | 
+                    UIUserNotificationType.Badge | 
+                    UIUserNotificationType.Sound, 
+                    null);
+
+                app.RegisterUserNotificationSettings(notificationSettings);
+            }
+
+            if(options != null)
+            {
+                if (options.ContainsKey(UIApplication.LaunchOptionsLocalNotificationKey))
+                {
+                    UILocalNotification localNotification = options[UIApplication.LaunchOptionsLocalNotificationKey] as UILocalNotification;
+                   if(localNotification != null)
+                    {
+                        var alertView = new UIAlertView(localNotification.AlertAction, localNotification.AlertBody, null, "Ok", null);
+                        alertView.Show();
+
+                        // Reset app icon badge
+                        UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+                    }
+                }
+            }
+
             return base.FinishedLaunching(app, options);
+        }
+
+        public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)
+        {
+            base.ReceivedLocalNotification(application, notification);
+
+            UIAlertController alertController = UIAlertController.Create(notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
+            alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
+            UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
         }
     }
 }
