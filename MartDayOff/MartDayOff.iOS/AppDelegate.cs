@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Foundation;
+using MartDayOff.iOS.Services;
+using MartDayOff.Services;
 using UIKit;
 
 namespace MartDayOff.iOS
@@ -62,10 +65,29 @@ namespace MartDayOff.iOS
         public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)
         {
             base.ReceivedLocalNotification(application, notification);
-
+            
+            
             UIAlertController alertController = UIAlertController.Create(notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
             UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+
+            var localNotificationService=Xamarin.Forms.DependencyService.Get<ILocalNotificationService>();
+
+            if (notification.UserInfo.ContainsKey(NSObject.FromObject(LocalNotificationService.NotificationKey)))
+            {
+                try
+                {
+                    var idObject = notification.UserInfo[NSObject.FromObject(LocalNotificationService.NotificationKey)];
+                    var id = ((NSNumber)idObject).Int32Value;
+                    var eventArgs = new LocalNotificationReceivedEventArgs(id);
+                    localNotificationService.OnReceived(eventArgs);
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            }
+            
         }
     }
 }

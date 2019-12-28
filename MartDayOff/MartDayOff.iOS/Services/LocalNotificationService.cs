@@ -13,7 +13,7 @@ namespace MartDayOff.iOS.Services
 {
     public class LocalNotificationService : ILocalNotificationService
     {
-        const string NotificationKey = "LocalNotificationKey";
+        public const string NotificationKey = "LocalNotificationKey";
 
         public event EventHandler<LocalNotificationReceivedEventArgs> Received;
         public event EventHandler<LocalNotificationRegisteredEventArgs> Registered;
